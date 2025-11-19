@@ -17,5 +17,9 @@
 ## Use cases covered
 | S.NO | Use Case | Status |
 | :------- | :------: | -------: |
-| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 |
-| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 |
+| 1 | Availability check by date | Implemented |
+| 2 | Availability check by date, start_time | Implemented |
+| 3 | Booking using service, date, start_time, duration and professional_count | Implemented |
+| 4 | Update professional availability after booking confirmed | Implemented |
+| 5 | Update booking by changing date and start_time | Implemented |
+| 6 | Update booking by changing only start_time | Implemented |
