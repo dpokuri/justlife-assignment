@@ -17,9 +17,20 @@
 ## Use cases covered
 | S.NO | Use Case | Status |
 | :------- | :------: | -------: |
-| 1 | Availability check by date | Implemented |
-| 2 | Availability check by date, start_time | Implemented |
-| 3 | Booking using service, date, start_time, duration and professional_count | Implemented |
-| 4 | Update professional availability after booking confirmed | Implemented |
-| 5 | Update booking by changing date and start_time | Implemented |
-| 6 | Update booking by changing only start_time | Implemented |
+| 1 | Availability check by date | Covered |
+| 2 | Availability check by date, start_time | Covered |
+| 3 | Booking using service, date, start_time, duration and professional_count | Covered |
+| 4 | Update professional availability after booking confirmed | Covered |
+| 5 | Update booking by changing date and start_time | Covered |
+| 6 | Update booking by changing only start_time | Covered |
+
+
+## Tasks Status
+| S.NO | Task | Status |
+| :------- | :------: | -------: |
+| 1 | The project should be written with Java (with Spring Boot) programming language | Completed |
+| 2 | Create a Restful API by applying proper design patterns | Completed |
+| 3 | Functional and unit tests should be written. | Pending |
+| 4 | API documentation should be created automatically | Completed |
+| 5 | All data should be saved in MySQL, PostgreSQL, or any relational database | Completed |
+| 6 | Implementing booking requests with multiple cleaner professionals is a huge plus | Completed |
