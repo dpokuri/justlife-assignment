@@ -14,4 +14,8 @@
 7. Customer will be providing date and start_time to update the booked appointment. Then system should be able to handle both date and start_time change
    
 
-
+## Use cases covered
+| Column A | Column B | Column C |
+    | :------- | :------: | -------: |
+    | Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 |
+    | Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 |
