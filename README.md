@@ -41,4 +41,6 @@
 | 8 | Optimize the code further to improve the performance | Pending |
 | 9 | Create proper Tech design doc| Pending |
 | 10 | Implement schedulors| Pending |
-| 10 | Enhance the capabilities of the system by covering various corner case| Pending |
+| 11 | Enhance the capabilities of the system by covering various corner case| Pending |
+| 12 | High Level Architecture diagram| Pending |
+| 13 | Database Schema design to the doc| Pending |
