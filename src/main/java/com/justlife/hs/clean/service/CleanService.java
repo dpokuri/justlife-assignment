@@ -2,7 +2,6 @@ package com.justlife.hs.clean.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -87,70 +86,46 @@ public class CleanService {
 
 	public BookingProfInfo updateBooking(UpdateBookingRequest req) {
 
+		// Fetch booked slots for the current appointment
 		List<BookingInfo> bookInfoList = cleanDao.getBookingInfo(req.getBookingId());
-//
-//		// If only in start time
-//		if (!bookInfoList.isEmpty() && req.getDate().isEqual(bookInfoList.get(0).getDate())) {
-//			BookingInfo bookInfo = bookInfoList.get(0);
-//			LocalTime currentEndTime = req.getStartTime().plus(bookInfo.getDuration(), ChronoUnit.DAYS);
-//
-//			List<Long> profIds = bookInfoList.stream().map(bi -> bi.getId()).collect(Collectors.toList());
-//
-//			List<Schedule> slots = cleanDao.getMergableSlots(bookInfo.getDate(), bookInfo.getServiceId(), profIds);
-//			if (!slots.isEmpty()) {
-//
-//				Map<Long, List<Schedule>> byProfId = slots.stream().collect(Collectors.groupingBy(i -> i.getProfId()));
-//				
-//				Schedule bookedSlot = Schedule.builder().
-//				
-//				for (Map.Entry<Long, List<Schedule>> entry : byProfId.entrySet()) {
-//					
-//					
-//					
-//					
-//		            String name = entry.getKey();
-//		            Integer score = entry.getValue();
-//		            System.out.println(name + ": " + score);
-//		        }
-//				
-//				
-//				
-//				
-//				
-//				
-//
-//			}
-//
-//			if (req.getStartTime().isBefore(bookInfo.getStartTime())) {
-//
-//				// Will have to get before availabilities for the same professional slots
-//				return null;
-//
-//			} else if (req.getStartTime().isAfter(bookInfo.getStartTime())) {
-//
-//				// Will have to get after availabilities for the same professional slots
-//				return null;
-//
-//			} else {
-//
-//				CreateBookingRequest createReq = CreateBookingRequest.builder().customerId(bookInfo.getCustomerId())
-//						.date(bookInfo.getDate()).serviceId(bookInfo.getServiceId()).startTime(req.getStartTime())
-//						.duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount()).build();
-//
-//				return createAppointment(createReq);
-//			}
-//
-//		} else {
-		BookingInfo bookInfo = bookInfoList.get(0);
-		CreateBookingRequest createReq = CreateBookingRequest.builder().customerId(bookInfo.getCustomerId())
-				.date(bookInfo.getDate()).serviceId(bookInfo.getServiceId()).startTime(req.getStartTime())
-				.duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount()).build();
 
-		return createAppointment(createReq);
+		BookingInfo bookInfo = null;
+		if (!bookInfoList.isEmpty()) {
+			bookInfo = bookInfoList.get(0);
+			List<Long> profIds = bookInfoList.stream().map(bi -> bi.getId()).collect(Collectors.toList());
+			List<Schedule> slots = cleanDao.getMergableSlots(bookInfo.getDate(), bookInfo.getServiceId(), profIds);
 
-//		}
+			// booked slots to the mergable slots to derive new slots
+			for (BookingInfo bf : bookInfoList) {
+				Schedule bookedSlot = Schedule.builder().profId(bf.getProfId()).startTime(bf.getStartTime())
+						.endTime(bf.getEndTime()).build();
+				slots.add(bookedSlot);
+			}
 
+			Map<Long, List<Schedule>> byProfId = slots.stream().collect(Collectors.groupingBy(i -> i.getProfId()));
+			List<Schedule> newSlots = new ArrayList<>();
+			for (Map.Entry<Long, List<Schedule>> entry : byProfId.entrySet()) {
+				newSlots.addAll(mergeslots(entry.getValue()));
+			}
+
+			// Store the new merged slots and clear the existing slots
+			List<Long> slotIds = slots.stream().map(s -> s.getSlotId()).collect(Collectors.toList());
+			cleanDao.storeMergedSlots(newSlots);
+			cleanDao.deleteExistingSlots(slotIds); // This can be asynchronous
+			cleanDao.deleteBookedSlots(bookInfoList); // This can be asynchronous
+			cleanDao.deleteBookingProfMappingData(req.getBookingId()); // This can be asynchronous
+
+			// Search for available slots and book the appointment accordingly
+			CreateBookingRequest createReq = CreateBookingRequest.builder().customerId(bookInfo.getCustomerId())
+					.date(bookInfo.getDate()).serviceId(bookInfo.getServiceId()).startTime(req.getStartTime())
+					.duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount()).build();
+
+			return createAppointment(createReq);
+		}
+		return null;
 	}
+	
+	
 	
 	public String createProfSchedules(LocalDate date) {
 
