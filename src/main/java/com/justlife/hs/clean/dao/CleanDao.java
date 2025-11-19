@@ -46,38 +46,36 @@ public class CleanDao {
 
 	@Value("${com.justlife.hs.clean.dao.CleanDao.storeBooking}")
 	private String storeBooking;
-	
+
 	@Value("${com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime}")
 	private String getSchedulesByDateAndTime;
-	
+
 	@Value("${com.justlife.hs.clean.dao.CleanDao.getBookingInfoById}")
 	private String getBookingInfoById;
-	
+
 	@Value("${com.justlife.hs.clean.dao.CleanDao.getMergableSlots}")
 	private String getMergableSlots;
-	
+
+	@Value("${com.justlife.hs.clean.dao.CleanDao.deleteSlots}")
+	private String deleteSlots;
 
 	private final RowMapper<Schedule> ScheduleRowMapper = BeanPropertyRowMapper.newInstance(Schedule.class);
 	private final RowMapper<ProfSlot> profRowMapper = BeanPropertyRowMapper.newInstance(ProfSlot.class);
 	private final RowMapper<BookingInfo> bookRowMapper = BeanPropertyRowMapper.newInstance(BookingInfo.class);
 	private final RowMapper<Schedule> slotRowMapper = BeanPropertyRowMapper.newInstance(Schedule.class);
-	
 
-	
 	public List<Long> getAvailableVehicles(LocalDate date) {
 		String sql = "SELECT id FROM test.vehicle_info";
 		return jdbcTemplate.queryForList(sql, Long.class);
 
 	}
 
-	
 	public List<Long> getAvailableProfs(LocalDate date) {
 		String sql = "SELECT id FROM test.professional_info";
 		return jdbcTemplate.queryForList(sql, Long.class);
 
 	}
 
-	
 	public int[] storeSchedules(List<Schedule> avls) {
 
 		return jdbcTemplate.batchUpdate("INSERT INTO test.prof_schedule(\n"
@@ -102,23 +100,20 @@ public class CleanDao {
 				});
 	}
 
-	
 	public List<Schedule> getAvailability(int serviceId, LocalDate date) {
 		final Map<String, Object> params = Map.of("serviceId", serviceId, "date", date);
 		return Optional.ofNullable(npjt.query(getSchedulesByDate, params, ScheduleRowMapper))
 				.orElse(new ArrayList<Schedule>());
 	}
 
-	
 	public List<Schedule> getAvailability(int serviceId, LocalDate date, LocalTime startTime, LocalTime endTime) {
-		final Map<String, Object> params = Map.of("serviceId", serviceId, "date", date, "startTime", startTime, "endTime",
-				endTime);
+		final Map<String, Object> params = Map.of("serviceId", serviceId, "date", date, "startTime", startTime,
+				"endTime", endTime);
 		return Optional.ofNullable(npjt.query(getSchedulesByDateAndTime, params, ScheduleRowMapper))
 				.orElse(new ArrayList<Schedule>());
 
 	}
 
-	
 	public long storeBookingInfo(CreateBookingRequest req) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		npjt.update(storeBooking, new BeanPropertySqlParameterSource(req), keyHolder, new String[] { "id" });
@@ -145,12 +140,10 @@ public class CleanDao {
 				});
 	}
 
-	
 	public void updateSchedule(List<ProfSlot> profSlots) {
 
 	}
 
-	
 	public List<ProfSlot> getAvailableProfs(CreateBookingRequest req) {
 
 		final Map<String, Object> params = Map.of("serviceId", req.getServiceId(), "date", req.getDate(), "startTime",
@@ -159,7 +152,6 @@ public class CleanDao {
 		return Optional.ofNullable(npjt.query(getSchedulesByDateAndtime, params, profRowMapper))
 				.orElse(new ArrayList<ProfSlot>());
 	}
-
 
 	public int[] updateBookedSlots(List<Slot> bookedSlots) {
 
@@ -183,13 +175,10 @@ public class CleanDao {
 				});
 	}
 
-
 	public int[] updateProfsAvailability(List<ProfSlot> dsl) {
-		return jdbcTemplate.batchUpdate(
-				"INSERT INTO test.prof_schedule(\n"
+		return jdbcTemplate.batchUpdate("INSERT INTO test.prof_schedule(\n"
 				+ "	prof_id, date, start_time, end_time, vehicle_id, service_id, status)\n"
-				+ "	VALUES (?, ?, ?, ?, ?, ?, ?);",
-				new BatchPreparedStatementSetter() {
+				+ "	VALUES (?, ?, ?, ?, ?, ?, ?);", new BatchPreparedStatementSetter() {
 
 					@Override
 					public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -201,14 +190,14 @@ public class CleanDao {
 						ps.setLong(6, dsl.get(i).getServiceId());
 						ps.setString(7, "AVAILABLE");
 					}
+
 					@Override
 					public int getBatchSize() {
 						return dsl.size();
 					}
 				});
-		
-	}
 
+	}
 
 	public List<BookingInfo> getBookingInfo(long bookingId) {
 		final Map<String, Object> params = Map.of("bookingId", bookingId);
@@ -216,11 +205,67 @@ public class CleanDao {
 				.orElse(new ArrayList<BookingInfo>());
 	}
 
-
 	public List<Schedule> getMergableSlots(LocalDate date, long serviceId, List<Long> profIds) {
 		final Map<String, Object> params = Map.of("date", date, "serviceId", serviceId, "profIds", profIds);
 		return Optional.ofNullable(npjt.query(getMergableSlots, params, slotRowMapper))
 				.orElse(new ArrayList<Schedule>());
+	}
+
+	public int[] storeMergedSlots(List<Schedule> newSlots) {
+
+		return jdbcTemplate.batchUpdate("INSERT INTO test.prof_schedule(\n"
+				+ "	prof_id, date, start_time, end_time, vehicle_id, service_id, status)\n"
+				+ "	VALUES (?, ?, ?, ?, ?, ?, ?);", new BatchPreparedStatementSetter() {
+
+					@Override
+					public void setValues(PreparedStatement ps, int i) throws SQLException {
+						ps.setLong(1, newSlots.get(i).getProfId());
+						ps.setObject(2, newSlots.get(i).getDate());
+						ps.setObject(3, newSlots.get(i).getStartTime());
+						ps.setObject(4, newSlots.get(i).getEndTime());
+						ps.setLong(5, newSlots.get(i).getVehicleId());
+						ps.setLong(6, newSlots.get(i).getServiceId());
+						ps.setString(7, "AVAILABLE");
+					}
+
+					@Override
+					public int getBatchSize() {
+						return newSlots.size();
+					}
+				});
+	}
+
+	public int deleteExistingSlots(List<Long> slotIds) {
+		final Map<String, Object> params = Map.of("ids", slotIds);
+		return npjt.update(deleteSlots, params);
+	}
+
+	public int[] deleteBookedSlots(List<BookingInfo> list) {
+		return jdbcTemplate.batchUpdate("DELETE FROM test.prof_schedule(\n"
+				+ "	WHERE prof_id = ? AND date = ? AND start_time = ? AND end_time = ? AND status = 'BOOKED' \n",
+				new BatchPreparedStatementSetter() {
+
+					@Override
+					public void setValues(PreparedStatement ps, int i) throws SQLException {
+						ps.setLong(1, list.get(i).getProfId());
+						ps.setObject(2, list.get(i).getDate());
+						ps.setObject(3, list.get(i).getStartTime());
+						ps.setObject(4, list.get(i).getEndTime());
+						ps.setString(5, "BOOKED");
+					}
+
+					@Override
+					public int getBatchSize() {
+						return list.size();
+					}
+				});
+
+	}
+
+	public int deleteBookingProfMappingData(long bookingId) {
+		final Map<String, Object> params = Map.of("id", bookingId);
+		return npjt.update("DELETE FROM test.booking_prof_map WHERE booking_id=:id", params);
+
 	}
 
 }
