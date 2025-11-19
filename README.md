@@ -23,7 +23,9 @@
 | 4 | Update professional availability after booking confirmed | Covered |
 | 5 | Update booking by changing date and start_time | Covered |
 | 6 | Update booking by changing only start_time | Covered |
-| 7 | If single professional is not available to cover the entire duration then multiple professional can contribute to same duration like 1/2 hours by each professional| Covered |
+| 7 | If single professional is not available to cover the entire duration then multiple professional can contribute to same duration like 1/2 hours by each professional| Not Covered |
+| 8 | Customer can choose available slots from one more professionals and system use that information and book the appointment. This is a kind of customer preferences| Not Covered |
+| 9 | Merging multiple hops into a single booking| Not Covered |
 
 
 ## Tasks Status
