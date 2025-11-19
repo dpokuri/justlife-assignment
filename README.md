@@ -16,7 +16,7 @@
 
 ## Use cases covered
 | S.NO | Use Case | Status |
-| :------- | :------: | -------: |
+| :------- | :------ | -------: |
 | 1 | Availability check by date | Covered |
 | 2 | Availability check by date, start_time | Covered |
 | 3 | Booking using service, date, start_time, duration and professional_count | Covered |
@@ -27,7 +27,7 @@
 
 ## Tasks Status
 | S.NO | Task | Status |
-| :------- | :------: | -------: |
+| :------- | :------ | :-------: |
 | 1 | The project should be written with Java (with Spring Boot) programming language | Completed |
 | 2 | Create a Restful API by applying proper design patterns | Completed |
 | 3 | Functional and unit tests should be written. | Pending |
