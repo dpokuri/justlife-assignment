@@ -59,11 +59,9 @@ public class CleanDao {
 
 	@Value("${com.justlife.hs.clean.dao.CleanDao.deleteSlots}")
 	private String deleteSlots;
-	
+
 	@Value("${com.justlife.hs.clean.dao.CleanDao.updateBooking}")
 	private String updateBooking;
-	
-	
 
 	private final RowMapper<Schedule> ScheduleRowMapper = BeanPropertyRowMapper.newInstance(Schedule.class);
 	private final RowMapper<ProfSlot> profRowMapper = BeanPropertyRowMapper.newInstance(ProfSlot.class);

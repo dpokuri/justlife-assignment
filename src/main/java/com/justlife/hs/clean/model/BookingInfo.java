@@ -28,8 +28,4 @@ public class BookingInfo {
 	private int duration;
 	private int profCount;
 	private long profId;
-	
-	
-	  
-
 }

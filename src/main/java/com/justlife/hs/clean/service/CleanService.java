@@ -56,12 +56,12 @@ public class CleanService {
 		List<ProfSlot> avlProfSlots = cleanDao.getAvailableProfs(req);
 		if (!avlProfSlots.isEmpty()) {
 			req.setVehicleId(avlProfSlots.get(0).getVehicleId());
-			if(req.getId() <= 0) {
-			bookingId = cleanDao.storeBookingInfo(req);
-			}else {
+			if (req.getId() <= 0) {
+				bookingId = cleanDao.storeBookingInfo(req);
+			} else {
 				bookingId = cleanDao.updateBookingInfo(req);
 			}
-			
+
 			cleanDao.storeBookingProfMap(bookingId, avlProfSlots);
 
 			List<Slot> bookedSlots = avlProfSlots.stream()
@@ -101,8 +101,9 @@ public class CleanService {
 
 			// booked slots to the mergable slots to derive new slots
 			for (BookingInfo bf : bookInfoList) {
-				Schedule bookedSlot = Schedule.builder().profId(bf.getProfId()).date(bf.getDate()).startTime(bf.getStartTime())
-						.endTime(bf.getEndTime()).serviceId(bf.getServiceId()).vehicleId(bf.getVehicle_id()).build();
+				Schedule bookedSlot = Schedule.builder().profId(bf.getProfId()).date(bf.getDate())
+						.startTime(bf.getStartTime()).endTime(bf.getEndTime()).serviceId(bf.getServiceId())
+						.vehicleId(bf.getVehicle_id()).build();
 				slots.add(bookedSlot);
 			}
 
@@ -120,9 +121,10 @@ public class CleanService {
 			cleanDao.deleteBookingProfMappingData(req.getBookingId()); // This can be asynchronous
 
 			// Search for available slots and book the appointment accordingly
-			CreateBookingRequest createReq = CreateBookingRequest.builder().id(req.getBookingId()).customerId(bookInfo.getCustomerId())
-					.date(bookInfo.getDate()).serviceId(bookInfo.getServiceId()).startTime(req.getStartTime())
-					.duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount()).build();
+			CreateBookingRequest createReq = CreateBookingRequest.builder().id(req.getBookingId())
+					.customerId(bookInfo.getCustomerId()).date(bookInfo.getDate()).serviceId(bookInfo.getServiceId())
+					.startTime(req.getStartTime()).duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount())
+					.build();
 
 			return createAppointment(createReq);
 		}

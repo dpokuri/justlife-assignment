@@ -60,22 +60,21 @@ public class CleanController {
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
 	}
-	
-	
+
 	@PostMapping("/bookings")
 	public ResponseEntity<BookingResp> appointmentBooking(@RequestBody CreateBookingRequest req) {
 
 		BookingResp response = null;
 		BookingProfInfo data = null;
 		Status status = null;
-		
-			data = cleanService.createAppointment(req);
-			if (null != data) {
-				status = Status.builder().code("201").type("SUCCESS").message("APPOINT_CONFIRMED")
-						.description("Appointment is booked successfully").build();
-				response = BookingResp.builder().data(data).status(status).build();
-				return new ResponseEntity<>(response, HttpStatus.CREATED);
-			}
+
+		data = cleanService.createAppointment(req);
+		if (null != data) {
+			status = Status.builder().code("201").type("SUCCESS").message("APPOINT_CONFIRMED")
+					.description("Appointment is booked successfully").build();
+			response = BookingResp.builder().data(data).status(status).build();
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
+		}
 
 		status = Status.builder().code("400").type("ERROR").message("INVALID_INPUT")
 				.description("Don't have available slots to meet the requirements").build();
@@ -83,8 +82,7 @@ public class CleanController {
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
 	}
-	
-	
+
 	@PutMapping("/bookings")
 	public ResponseEntity<BookingResp> updateBooking(@RequestBody UpdateBookingRequest req) {
 
@@ -105,8 +103,7 @@ public class CleanController {
 		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
 
 	}
-	
-	
+
 	@PostMapping("/prof-schedule")
 	public ResponseEntity<ScheduleResp> createProfSchedules(@RequestBody LocalDate date) {
 
@@ -128,12 +125,5 @@ public class CleanController {
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }
