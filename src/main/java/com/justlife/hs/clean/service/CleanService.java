@@ -92,13 +92,13 @@ public class CleanService {
 		BookingInfo bookInfo = null;
 		if (!bookInfoList.isEmpty()) {
 			bookInfo = bookInfoList.get(0);
-			List<Long> profIds = bookInfoList.stream().map(bi -> bi.getId()).collect(Collectors.toList());
+			List<Long> profIds = bookInfoList.stream().map(bi -> bi.getProfId()).collect(Collectors.toList());
 			List<Schedule> slots = cleanDao.getMergableSlots(bookInfo, profIds);
 
 			// booked slots to the mergable slots to derive new slots
 			for (BookingInfo bf : bookInfoList) {
-				Schedule bookedSlot = Schedule.builder().profId(bf.getProfId()).startTime(bf.getStartTime())
-						.endTime(bf.getEndTime()).build();
+				Schedule bookedSlot = Schedule.builder().profId(bf.getProfId()).date(bf.getDate()).startTime(bf.getStartTime())
+						.endTime(bf.getEndTime()).serviceId(bf.getServiceId()).vehicleId(bf.getVehicle_id()).build();
 				slots.add(bookedSlot);
 			}
 

@@ -8,7 +8,7 @@ public class HomeServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomeServiceApplication.class, args);
-		System.out.println("Testing");
+		
 	}
 
 }

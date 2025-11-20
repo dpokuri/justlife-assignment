@@ -20,13 +20,14 @@ public class BookingInfo {
 	
 	private long id;
 	private long customerId;
-	private long serviceId;
+	private int serviceId;
+	private long vehicle_id;
 	private LocalDate date;
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private int duration;
 	private int profCount;
-	private int profId;
+	private long profId;
 	
 	
 	  

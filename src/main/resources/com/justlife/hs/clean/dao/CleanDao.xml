@@ -69,7 +69,7 @@
 	   </entry>
    
       <entry key="com.justlife.hs.clean.dao.CleanDao.getMergableSlots">
-					SELECT p.id prof_id, s.id slot_id, s.start_time, s.end_time, s.service_id
+					SELECT p.id prof_id, s.id slot_id, s.date, s.start_time, s.end_time, s.service_id, s.vehicle_id
 					FROM test.prof_info p, test.prof_schedule s 
 					WHERE s.prof_id = p.id
 					AND s.date =:date
