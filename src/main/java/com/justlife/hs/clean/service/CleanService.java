@@ -2,6 +2,7 @@ package com.justlife.hs.clean.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,13 +28,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CleanService {
-	
-	
+
 	private final CleanDao cleanDao;
 	private final TimeSlotCalculator slotCalcator;
-	
 
-	
 	public List<Schedule> getAvailability(int serviceId, LocalDate date, LocalTime startTime, int duration) {
 		List<Schedule> avls = null;
 
@@ -47,10 +45,13 @@ public class CleanService {
 		return avls;
 	}
 
-	
-	
 	@Transactional
 	public BookingProfInfo createAppointment(CreateBookingRequest req) {
+
+		if (req.getEndTime() == null) {
+			LocalTime endTime = req.getStartTime().plus(req.getDuration(), ChronoUnit.HOURS);
+			req.setEndTime(endTime);
+		}
 
 		List<ProfSlot> avlProfSlots = cleanDao.getAvailableProfs(req);
 		if (!avlProfSlots.isEmpty()) {
@@ -60,7 +61,8 @@ public class CleanService {
 			cleanDao.storeBookingProfMap(bookingId, avlProfSlots);
 
 			List<Slot> bookedSlots = avlProfSlots.stream()
-					.map(e -> new Slot(e.getSlotId(), req.getDate(), req.getStartTime(), req.getEndTime())).collect(Collectors.toList());
+					.map(e -> new Slot(e.getSlotId(), req.getDate(), req.getStartTime(), req.getEndTime()))
+					.collect(Collectors.toList());
 
 			List<ProfInfo> profs = avlProfSlots.stream().map(
 					e -> new ProfInfo(e.getProfId(), e.getFirstName(), e.getLastName(), e.getPhone(), e.getEmail()))
@@ -81,8 +83,6 @@ public class CleanService {
 		return null;
 
 	}
-		
-		
 
 	public BookingProfInfo updateBooking(UpdateBookingRequest req) {
 
@@ -93,7 +93,7 @@ public class CleanService {
 		if (!bookInfoList.isEmpty()) {
 			bookInfo = bookInfoList.get(0);
 			List<Long> profIds = bookInfoList.stream().map(bi -> bi.getId()).collect(Collectors.toList());
-			List<Schedule> slots = cleanDao.getMergableSlots(bookInfo.getDate(), bookInfo.getServiceId(), profIds);
+			List<Schedule> slots = cleanDao.getMergableSlots(bookInfo, profIds);
 
 			// booked slots to the mergable slots to derive new slots
 			for (BookingInfo bf : bookInfoList) {
@@ -124,9 +124,7 @@ public class CleanService {
 		}
 		return null;
 	}
-	
-	
-	
+
 	public String createProfSchedules(LocalDate date) {
 
 		List<Long> vehicles = cleanDao.getAvailableVehicles(date.plusDays(1));
@@ -158,8 +156,7 @@ public class CleanService {
 		}
 		return "ERROR";
 	}
-	
-	
+
 	private List<Schedule> mergeslots(List<Schedule> slots) {
 		slots.sort(Comparator.comparing(i -> i.getStartTime()));
 		List<Schedule> merged = new ArrayList<>();
