@@ -2,90 +2,104 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 
-	<entry key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDate">
-				SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id, s.start_time, s.end_time,
-				s.vehicle_id, s.service_id, s.date, p.phone, p.email
-				FROM test.prof_info p, test.prof_schedule s 
-				WHERE s.prof_id = p.id
-				AND s.date =:date
-				AND s.status = 'AVAILABLE
-				AND s.service_id=:serviceId;
-	                         
-    </entry>
-    
-    <entry key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime">
-				SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id, s.start_time, s.end_time,
-				s.vehicle_id, s.service_id, s.date, p.phone, p.email
-				FROM test.prof_info p, test.prof_schedule s 
-				WHERE s.prof_id = p.id
-				AND s.date =:date
-				AND start_time &lt;=:startTime
-				AND end_time >=:endTime
-				AND service_id =:serviceId
-				AND s.status = 'AVAILABLE';
-	                         
-    </entry>
-    
-    
-    
-    <entry key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndtime">
-                SELECT p.id prof_id, p.first_name, p.last_name, s.id slot_id, s.start_time,  s.end_time,  
-                s.vehicle_id, s.service_id, s.date, p.phone, p.email
-				FROM test.prof_info p
-				JOIN test.prof_schedule s 
-				    ON s.prof_id = p.id
-				WHERE s.date =:date
-				  AND s.start_time &lt;=:startTime
-				  AND s.end_time &gt;=:endTime
-				  AND s.service_id = 1
-				  AND s.status = 'AVAILABLE'
-				  AND s.vehicle_id IN (
-				        SELECT vehicle_id
-				        FROM test.prof_schedule
-				        WHERE date =:date
-				          AND start_time &lt;=:startTime
-				          AND end_time >=:endTime
-				          AND service_id =:serviceId
-						  AND s.status = 'AVAILABLE'
-				        GROUP BY vehicle_id
-				        HAVING COUNT(*) >=:profCount
-				  ) LIMIT :profCount; 
-                
-    </entry>
-    
-	    <entry key="com.justlife.hs.clean.dao.CleanDao.storeBooking">
-					INSERT INTO test.booking_info(
-					customer_id, service_id, vehicle_id, date, start_time, end_time, status, prof_count, duration)
-					VALUES (:customerId, :serviceId, :vehicleId, :date, :startTime, :endTime, 'BOOKED', :profCount, :duration);
-	
-	   </entry>
-   
-	   <entry key="com.justlife.hs.clean.dao.CleanDao.getBookingInfoById">
-					SELECT b.id, b.customer_id, b.date, b.start_time, b.end_time, b.duration, b.vehicle_id, b.prof_count, bp.booking_id, 
-					bp.prof_id, b.service_id 
-				    FROM test.booking_info b, test.booking_prof_map bp
-				    WHERE b.id =:bookingId
-				    AND b.id = bp.booking_id
-	   </entry>
-   
-      <entry key="com.justlife.hs.clean.dao.CleanDao.getMergableSlots">
-					SELECT p.id prof_id, s.id slot_id, s.date, s.start_time, s.end_time, s.service_id, s.vehicle_id
-					FROM test.prof_info p, test.prof_schedule s 
-					WHERE s.prof_id = p.id
-					AND s.date =:date
-					AND (s.end_time =:startTime OR  s.start_time =:endTime )
-					AND s.service_id =:serviceId
-					AND s.prof_id in (:profIds)
-     </entry>
-     
-     <entry key="com.justlife.hs.clean.dao.CleanDao.deleteSlots">
-					DELETE FROM test.prof_schedule
-					WHERE id in (:ids)
-     </entry>
-    
-     
+	<entry
+		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDate">
+		SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id,
+		s.start_time, s.end_time,
+		s.vehicle_id, s.service_id, s.date, p.phone, p.email
+		FROM test.prof_info p, test.prof_schedule s
+		WHERE s.prof_id = p.id
+		AND s.date =:date
+		AND s.status = 'AVAILABLE
+		AND s.service_id=:serviceId;
 
-	
+	</entry>
+
+	<entry
+		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime">
+		SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id,
+		s.start_time, s.end_time,
+		s.vehicle_id, s.service_id, s.date, p.phone, p.email
+		FROM test.prof_info p, test.prof_schedule s
+		WHERE s.prof_id = p.id
+		AND s.date =:date
+		AND start_time &lt;=:startTime
+		AND end_time >=:endTime
+		AND service_id =:serviceId
+		AND s.status = 'AVAILABLE';
+
+	</entry>
+
+	<entry
+		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndtime">
+		SELECT p.id prof_id, p.first_name, p.last_name, s.id slot_id, s.start_time,
+		s.end_time,
+		s.vehicle_id, s.service_id, s.date, p.phone, p.email
+		FROM test.prof_info p
+		JOIN test.prof_schedule s
+		ON s.prof_id = p.id
+		WHERE s.date =:date
+		AND s.start_time &lt;=:startTime
+		AND s.end_time &gt;=:endTime
+		AND s.service_id = 1
+		AND s.status = 'AVAILABLE'
+		AND s.vehicle_id IN (
+		SELECT vehicle_id
+		FROM test.prof_schedule
+		WHERE date =:date
+		AND start_time &lt;=:startTime
+		AND end_time >=:endTime
+		AND service_id =:serviceId
+		AND s.status = 'AVAILABLE'
+		GROUP BY vehicle_id
+		HAVING COUNT(*) >=:profCount
+		) LIMIT :profCount;
+
+	</entry>
+
+	<entry key="com.justlife.hs.clean.dao.CleanDao.storeBooking">
+		INSERT INTO test.booking_info(
+		customer_id, service_id, vehicle_id, date, start_time, end_time, status,
+		prof_count, duration)
+		VALUES (:customerId, :serviceId, :vehicleId, :date, :startTime, :endTime,
+		'BOOKED', :profCount, :duration);
+
+	</entry>
+
+	<entry
+		key="com.justlife.hs.clean.dao.CleanDao.getBookingInfoById">
+		SELECT b.id, b.customer_id, b.date, b.start_time, b.end_time, b.duration,
+		b.vehicle_id, b.prof_count, bp.booking_id,
+		bp.prof_id, b.service_id
+		FROM test.booking_info b, test.booking_prof_map bp
+		WHERE b.id =:bookingId
+		AND b.id = bp.booking_id
+	</entry>
+
+	<entry key="com.justlife.hs.clean.dao.CleanDao.getMergableSlots">
+		SELECT p.id prof_id, s.id slot_id, s.date, s.start_time, s.end_time,
+		s.service_id, s.vehicle_id
+		FROM test.prof_info p, test.prof_schedule s
+		WHERE s.prof_id = p.id
+		AND s.date =:date
+		AND (s.end_time =:startTime OR s.start_time =:endTime )
+		AND s.service_id =:serviceId
+		AND s.prof_id in (:profIds)
+	</entry>
+
+	<entry key="com.justlife.hs.clean.dao.CleanDao.deleteSlots">
+		DELETE FROM test.prof_schedule
+		WHERE id in (:ids)
+	</entry>
+
+	<entry key="com.justlife.hs.clean.dao.CleanDao.updateBooking">
+		UPDATE test.booking_info
+		SET vehicle_id =:vehicleId, date =:date, start_time =:startTime, end_time=:endTime, updated_on=CURRENT_TIMESTAMP
+		WHERE id=:id;
+	</entry>
+
+
+
 
 </properties>
   

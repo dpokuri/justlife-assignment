@@ -21,22 +21,22 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class CreateBookingRequest {
-	
+
+	@JsonIgnore
+	private long id;
 	private long customerId;
 	private long serviceId;
-	
+
 	@JsonIgnore
 	private long vehicleId;
 	private LocalDate date;
-	
+
 	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 	private LocalTime startTime;
-	
+
 	@DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
 	private LocalTime endTime;
 	private int duration;
 	private int profCount;
-	
-//	private List<ProfSlot> profSlots;
 
 }

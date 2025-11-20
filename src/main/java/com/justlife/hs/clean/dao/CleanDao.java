@@ -59,6 +59,11 @@ public class CleanDao {
 
 	@Value("${com.justlife.hs.clean.dao.CleanDao.deleteSlots}")
 	private String deleteSlots;
+	
+	@Value("${com.justlife.hs.clean.dao.CleanDao.updateBooking}")
+	private String updateBooking;
+	
+	
 
 	private final RowMapper<Schedule> ScheduleRowMapper = BeanPropertyRowMapper.newInstance(Schedule.class);
 	private final RowMapper<ProfSlot> profRowMapper = BeanPropertyRowMapper.newInstance(ProfSlot.class);
@@ -267,6 +272,12 @@ public class CleanDao {
 		final Map<String, Object> params = Map.of("id", bookingId);
 		return npjt.update("DELETE FROM test.booking_prof_map WHERE booking_id=:id", params);
 
+	}
+
+	public long updateBookingInfo(CreateBookingRequest req) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		npjt.update(updateBooking, new BeanPropertySqlParameterSource(req), keyHolder, new String[] { "id" });
+		return keyHolder.getKey().longValue();
 	}
 
 }

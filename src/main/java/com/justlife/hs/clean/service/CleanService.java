@@ -47,7 +47,7 @@ public class CleanService {
 
 	@Transactional
 	public BookingProfInfo createAppointment(CreateBookingRequest req) {
-
+		long bookingId = 0;
 		if (req.getEndTime() == null) {
 			LocalTime endTime = req.getStartTime().plus(req.getDuration(), ChronoUnit.HOURS);
 			req.setEndTime(endTime);
@@ -56,8 +56,12 @@ public class CleanService {
 		List<ProfSlot> avlProfSlots = cleanDao.getAvailableProfs(req);
 		if (!avlProfSlots.isEmpty()) {
 			req.setVehicleId(avlProfSlots.get(0).getVehicleId());
-			long bookingId = cleanDao.storeBookingInfo(req);
-
+			if(req.getId() <= 0) {
+			bookingId = cleanDao.storeBookingInfo(req);
+			}else {
+				bookingId = cleanDao.updateBookingInfo(req);
+			}
+			
 			cleanDao.storeBookingProfMap(bookingId, avlProfSlots);
 
 			List<Slot> bookedSlots = avlProfSlots.stream()
@@ -116,7 +120,7 @@ public class CleanService {
 			cleanDao.deleteBookingProfMappingData(req.getBookingId()); // This can be asynchronous
 
 			// Search for available slots and book the appointment accordingly
-			CreateBookingRequest createReq = CreateBookingRequest.builder().customerId(bookInfo.getCustomerId())
+			CreateBookingRequest createReq = CreateBookingRequest.builder().id(req.getBookingId()).customerId(bookInfo.getCustomerId())
 					.date(bookInfo.getDate()).serviceId(bookInfo.getServiceId()).startTime(req.getStartTime())
 					.duration(bookInfo.getDuration()).profCount(bookInfo.getProfCount()).build();
 
