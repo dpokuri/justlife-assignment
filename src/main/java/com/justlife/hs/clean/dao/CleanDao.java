@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -205,8 +206,9 @@ public class CleanDao {
 				.orElse(new ArrayList<BookingInfo>());
 	}
 
-	public List<Schedule> getMergableSlots(LocalDate date, long serviceId, List<Long> profIds) {
-		final Map<String, Object> params = Map.of("date", date, "serviceId", serviceId, "profIds", profIds);
+	public List<Schedule> getMergableSlots(BookingInfo bi, List<Long> profIds) {
+		final Map<String, Object> params = Map.of("date", bi.getDate(), "startTime", bi.getStartTime(), "endTime",
+				bi.getEndTime(), "serviceId", bi.getServiceId(), "profIds", profIds);
 		return Optional.ofNullable(npjt.query(getMergableSlots, params, slotRowMapper))
 				.orElse(new ArrayList<Schedule>());
 	}
@@ -241,7 +243,7 @@ public class CleanDao {
 	}
 
 	public int[] deleteBookedSlots(List<BookingInfo> list) {
-		return jdbcTemplate.batchUpdate("DELETE FROM test.prof_schedule(\n"
+		return jdbcTemplate.batchUpdate("DELETE FROM test.prof_schedule \n"
 				+ "	WHERE prof_id = ? AND date = ? AND start_time = ? AND end_time = ? AND status = 'BOOKED' \n",
 				new BatchPreparedStatementSetter() {
 
@@ -251,7 +253,6 @@ public class CleanDao {
 						ps.setObject(2, list.get(i).getDate());
 						ps.setObject(3, list.get(i).getStartTime());
 						ps.setObject(4, list.get(i).getEndTime());
-						ps.setString(5, "BOOKED");
 					}
 
 					@Override
