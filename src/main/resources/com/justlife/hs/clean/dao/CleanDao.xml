@@ -61,9 +61,9 @@
 	   </entry>
    
 	   <entry key="com.justlife.hs.clean.dao.CleanDao.getBookingInfoById">
-					SELECT b.id, b.customer_id, b.date, b.start_time, b.end_time, b.duration, b.vehicle, b.prof_count, bp.booking_id, 
+					SELECT b.id, b.customer_id, b.date, b.start_time, b.end_time, b.duration, b.vehicle_id, b.prof_count, bp.booking_id, 
 					bp.prof_id, b.service_id 
-				    FROM booking_info b, booking_prof_map bp
+				    FROM test.booking_info b, test.booking_prof_map bp
 				    WHERE b.id =:bookingId
 				    AND b.id = bp.booking_id
 	   </entry>
@@ -74,7 +74,7 @@
 					WHERE s.prof_id = p.id
 					AND s.date =:date
 					AND (s.end_time =:startTime OR  s.start_time =:endTime )
-					AND s.service_id =serviceId
+					AND s.service_id =:serviceId
 					AND s.prof_id in (:profIds)
      </entry>
      
