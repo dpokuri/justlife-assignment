@@ -58,7 +58,7 @@ public class CleanControllerTest {
 		when(cleanService.getAvailability(1, LocalDate.of(2025, 11, 18), LocalTime.of(10, 0), 4)).thenReturn(avlList);
 
 		mockMvc.perform(
-				get("/v1/home-services/cleaning/availability").param("serviceId", "1").param("date", "2025-11-18"))
+				get("/cleaning/availability").queryParam("serviceId", "1").queryParam("date", "2025-11-18"))
 				.andExpect(status().isOk());
 	}
 
