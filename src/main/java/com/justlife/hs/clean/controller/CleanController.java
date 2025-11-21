@@ -1,5 +1,6 @@
 package com.justlife.hs.clean.controller;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -23,7 +24,9 @@ import com.justlife.hs.clean.response.BookingProfInfo;
 import com.justlife.hs.clean.response.BookingResp;
 import com.justlife.hs.clean.response.ScheduleResp;
 import com.justlife.hs.clean.response.Status;
+import com.justlife.hs.clean.response.TestResponse;
 import com.justlife.hs.clean.service.CleanService;
+import com.justlife.hs.clean.util.ErrorCodes;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -50,15 +53,15 @@ public class CleanController {
 		Status status = null;
 
 		data = cleanService.getAvailability(serviceId, date, startTime, duration);
-		if (null != date) {
-			status = Status.builder().code("200").type("SUCCESS").message("AVAILABILITY_RETIEVED")
-					.description("Professionals availability details are retrieved").build();
+		if (null != data) {
+			status = Status.builder().code("200").type("SUCCESS").message("DATA_FETCHED").description(ErrorCodes.SCHEDULE_FETCHED_SUCCESS)
+					.timestamp(Instant.now()).build();
 			response = AvailabilityResp.builder().data(data).status(status).build();
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
-		status = Status.builder().code("400").type("ERROR").message("INVALID_INPUT")
-				.description("INVALID_INPUT_REQUEST").build();
+		status = Status.builder().code("400").type("ERROR").message("INVALID_INPUT").description(ErrorCodes.SCHEDULE_FETCHED_FAILURE)
+				.timestamp(Instant.now()).build();
 		response = AvailabilityResp.builder().status(status).build();
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
@@ -74,13 +77,13 @@ public class CleanController {
 		data = cleanService.createAppointment(req);
 		if (null != data) {
 			status = Status.builder().code("201").type("SUCCESS").message("APPOINT_CONFIRMED")
-					.description("Appointment is booked successfully").build();
+					.description(ErrorCodes.APPOINTMENT_BOOKING_SUCCESS).timestamp(Instant.now()).build();
 			response = BookingResp.builder().data(data).status(status).build();
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		}
 
 		status = Status.builder().code("400").type("ERROR").message("INVALID_INPUT")
-				.description("Don't have available slots to meet the requirements").build();
+				.description(ErrorCodes.APPOINTMENT_BOOKING_FAILURE).timestamp(Instant.now()).build();
 		response = BookingResp.builder().status(status).build();
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
@@ -94,15 +97,15 @@ public class CleanController {
 		Status status = null;
 
 		data = cleanService.updateBooking(req);
-		if (null != req) {
+		if (null != data) {
 			status = Status.builder().code("200").type("SUCCESS").message("BOOKING_UPDATED")
-					.description("Booking is updated successfully").build();
+					.description(ErrorCodes.BOOKING_UPDATE_SUCCESS).timestamp(Instant.now()).build();
 			response = BookingResp.builder().data(data).status(status).build();
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
 		status = Status.builder().code("204").type("ERROR").message("INVALID_INPUT")
-				.description("There are no bookings available with the given booking id").build();
+				.description(ErrorCodes.BOOKING_UPDATE_FAILURE).timestamp(Instant.now()).build();
 		response = BookingResp.builder().status(status).build();
 		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
 
@@ -118,16 +121,18 @@ public class CleanController {
 		data = cleanService.createProfSchedules(date);
 		if (data.contentEquals("SCHEDULE_GENERATED")) {
 			status = Status.builder().code("201").type("SUCCESS").message("SCHEULES_GENERATED")
-					.description("Schedules generated successfully").build();
+					.description(ErrorCodes.SCHEDULE_GENERATION_SUCCESS).timestamp(Instant.now()).build();
 			response = ScheduleResp.builder().data(data).status(status).build();
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
 		status = Status.builder().code("400").type("ERROR").message("INVALID_INPUT")
-				.description("There is an issue while generating the schedules").build();
+				.description(ErrorCodes.SCHEDULE_GENERATION_FAILURE).timestamp(Instant.now()).build();
 		response = ScheduleResp.builder().status(status).build();
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
 	}
+	
+	
 
 }
