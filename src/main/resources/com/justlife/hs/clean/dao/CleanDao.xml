@@ -4,7 +4,7 @@
 
 	<entry
 		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDate">
-		SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id,
+		SELECT p.id prof_id, p.first_name, p.last_name, s.id slot_id, s.service_id, s.vehicle_id,
 		s.start_time, s.end_time,
 		s.vehicle_id, s.service_id, s.date, p.phone, p.email
 		FROM test.prof_info p, test.prof_schedule s
@@ -17,7 +17,7 @@
 
 	<entry
 		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime">
-		SELECT p.id prof_id, p.first_name, p.last_name, s.service_id, s.vehicle_id,
+		SELECT p.id prof_id, p.first_name, p.last_name, s.id slot_id, s.service_id, s.vehicle_id,
 		s.start_time, s.end_time,
 		s.vehicle_id, s.service_id, s.date, p.phone, p.email
 		FROM test.prof_info p, test.prof_schedule s

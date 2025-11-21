@@ -25,6 +25,8 @@ import com.justlife.hs.clean.response.ScheduleResp;
 import com.justlife.hs.clean.response.Status;
 import com.justlife.hs.clean.service.CleanService;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,16 +40,17 @@ public class CleanController {
 
 	@GetMapping("/availability")
 	public ResponseEntity<AvailabilityResp> getAvailability(
-			@RequestParam(value = "serviceId", required = true) int serviceId,
-			@RequestParam(value = "date", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@RequestParam(value = "serviceId", required = true) @Min(value = 1) int serviceId,
+			@RequestParam(value = "date", required = true) @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
 			@RequestParam(value = "startTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
 			@RequestParam(value = "duration", required = false, defaultValue = "0") int duration) {
 
 		AvailabilityResp response = null;
 		List<Schedule> data = null;
 		Status status = null;
+
+		data = cleanService.getAvailability(serviceId, date, startTime, duration);
 		if (null != date) {
-			data = cleanService.getAvailability(serviceId, date, startTime, duration);
 			status = Status.builder().code("200").type("SUCCESS").message("AVAILABILITY_RETIEVED")
 					.description("Professionals availability details are retrieved").build();
 			response = AvailabilityResp.builder().data(data).status(status).build();
@@ -62,7 +65,7 @@ public class CleanController {
 	}
 
 	@PostMapping("/bookings")
-	public ResponseEntity<BookingResp> appointmentBooking(@RequestBody CreateBookingRequest req) {
+	public ResponseEntity<BookingResp> appointmentBooking(@RequestBody @NotNull CreateBookingRequest req) {
 
 		BookingResp response = null;
 		BookingProfInfo data = null;
@@ -84,13 +87,14 @@ public class CleanController {
 	}
 
 	@PutMapping("/bookings")
-	public ResponseEntity<BookingResp> updateBooking(@RequestBody UpdateBookingRequest req) {
+	public ResponseEntity<BookingResp> updateBooking(@RequestBody @NotNull UpdateBookingRequest req) {
 
 		BookingResp response = null;
 		BookingProfInfo data = null;
 		Status status = null;
+
+		data = cleanService.updateBooking(req);
 		if (null != req) {
-			data = cleanService.updateBooking(req);
 			status = Status.builder().code("200").type("SUCCESS").message("BOOKING_UPDATED")
 					.description("Booking is updated successfully").build();
 			response = BookingResp.builder().data(data).status(status).build();
