@@ -30,17 +30,17 @@
 
 ## Tasks Status
 | S.NO | Task | Status | Comments |
-| :------- | :------ | :------- | :-------|
+| :------- | :---------- | :------- | :-------|
 | 1 | The project should be written with Java (with Spring Boot) programming language | Completed |
 | 2 | Create a Restful API by applying proper design patterns | Completed |
-| 3 | Functional and unit tests should be written. | Pending |
+| 3 | Functional and unit tests should be written. | Completed |
 | 4 | API documentation should be created automatically | Completed | Integrated Swagger |
 | 5 | All data should be saved in MySQL, PostgreSQL, or any relational database | Completed |
 | 6 | Implementing booking requests with multiple cleaner professionals is a huge plus | Completed | Also planning to cover the use case where single duration can be shared by multiple professionals |
-| 7 | Added basic exception handling but wanted to improve further | Pending |
-| 8 | Optimize the code further to improve the performance | Pending |
-| 9 | Create proper Tech design doc| Pending |
-| 10 | Implement schedulors| Pending |
-| 11 | Enhance the capabilities of the system by covering various corner case| Pending |
-| 12 | High Level Architecture diagram| Pending |
-| 13 | Database Schema design to the doc| Pending |
+| 7 | Exception handling | In Progress | Added basic but wanted to improve further|
+| 8 | Optimize the code further to improve the performance | In Progress |
+| 9 | Create proper Tech design doc| In Progress |
+| 10 | Implement schedulors| In Progress |
+| 11 | Enhance the capabilities of the system by covering various corner case| In Progress |
+| 12 | High Level Architecture diagram| In Progress |
+| 13 | Database Schema design to the doc| In Progress |Schema design is ready but I will have to add to the doc|
