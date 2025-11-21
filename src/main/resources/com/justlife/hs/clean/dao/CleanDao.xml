@@ -10,7 +10,7 @@
 		FROM test.prof_info p, test.prof_schedule s
 		WHERE s.prof_id = p.id
 		AND s.date =:date
-		AND s.status = 'AVAILABLE
+		AND s.status = 'AVAILABLE'
 		AND s.service_id=:serviceId;
 
 	</entry>
@@ -31,7 +31,7 @@
 	</entry>
 
 	<entry
-		key="com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndtime">
+		key="com.justlife.hs.clean.dao.CleanDao.getSlotsByDateAndtime">
 		SELECT p.id prof_id, p.first_name, p.last_name, s.id slot_id, s.start_time,
 		s.end_time,
 		s.vehicle_id, s.service_id, s.date, p.phone, p.email

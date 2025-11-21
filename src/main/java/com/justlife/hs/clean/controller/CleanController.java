@@ -41,7 +41,7 @@ public class CleanController {
 			@RequestParam(value = "serviceId", required = true) int serviceId,
 			@RequestParam(value = "date", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
 			@RequestParam(value = "startTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
-			@RequestParam(value = "duration", required = false) int duration) {
+			@RequestParam(value = "duration", required = false, defaultValue = "0") int duration) {
 
 		AvailabilityResp response = null;
 		List<Schedule> data = null;

@@ -42,14 +42,14 @@ public class CleanDao {
 	@Value("${com.justlife.hs.clean.dao.CleanDao.getSchedulesByDate}")
 	private String getSchedulesByDate;
 
-	@Value("${com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndtime}")
-	private String getSchedulesByDateAndtime;
+	@Value("${com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime}")
+	private String getSchedulesByDateAndTime;
 
 	@Value("${com.justlife.hs.clean.dao.CleanDao.storeBooking}")
 	private String storeBooking;
 
-	@Value("${com.justlife.hs.clean.dao.CleanDao.getSchedulesByDateAndTime}")
-	private String getSchedulesByDateAndTime;
+	@Value("${com.justlife.hs.clean.dao.CleanDao.getSlotsByDateAndtime}")
+	private String getSlotsByDateAndtime;
 
 	@Value("${com.justlife.hs.clean.dao.CleanDao.getBookingInfoById}")
 	private String getBookingInfoById;
@@ -153,7 +153,7 @@ public class CleanDao {
 		final Map<String, Object> params = Map.of("serviceId", req.getServiceId(), "date", req.getDate(), "startTime",
 				req.getStartTime(), "endTime", req.getEndTime(), "profCount", req.getProfCount());
 
-		return Optional.ofNullable(npjt.query(getSchedulesByDateAndtime, params, profRowMapper))
+		return Optional.ofNullable(npjt.query(getSlotsByDateAndtime, params, profRowMapper))
 				.orElse(new ArrayList<ProfSlot>());
 	}
 
