@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.justlife.hs.clean.exception.BadRequestException;
 import com.justlife.hs.clean.model.Schedule;
 import com.justlife.hs.clean.request.CreateBookingRequest;
 import com.justlife.hs.clean.request.UpdateBookingRequest;
@@ -133,6 +134,26 @@ public class CleanController {
 
 	}
 	
+
+	// Global Exception handler testing 
 	
+	@GetMapping("/test")
+	public ResponseEntity<?> test(
+			@RequestParam(value = "serviceId", required = true) @Min(value = 1) int serviceId) {
+		TestResponse response = null;
+		Status status = null;
+
+		if(serviceId == 1) {
+			
+			List<String> data = List.of("1", "2", "3", "4");
+			
+			status = Status.builder().code("200").type("SUCCESS").message("DATA_FETCHED").description("Professionals availability details are retrieved")
+					.timestamp(Instant.now()).build();
+			response = TestResponse.builder().data(data).status(status).build();
+			
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		throw new BadRequestException("Invalid input");
+	}
 
 }

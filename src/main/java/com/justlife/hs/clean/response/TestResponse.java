@@ -1,5 +1,7 @@
 package com.justlife.hs.clean.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,6 @@ import lombok.Setter;
 public class TestResponse {
 	
 	private Status status;
-	private String data;
+	private List<String> data;
 
 }
