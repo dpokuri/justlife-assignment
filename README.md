@@ -47,4 +47,4 @@
 
 
 ## High Level Architecture Diagram
-![ArchitectureDiagram](./resources/justlife-Homeservice-Architecture.png)
+![ArchitectureDiagram](.src/main/resources/justlife-Homeservice-Architecture.png)
