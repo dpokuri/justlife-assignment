@@ -37,10 +37,10 @@
 | 4 | API documentation should be created automatically | Completed | Integrated Swagger |
 | 5 | All data should be saved in MySQL, PostgreSQL, or any relational database | Completed |
 | 6 | Implementing booking requests with multiple cleaner professionals is a huge plus | Completed | Also planning to cover the use case where single duration can be shared by multiple professionals |
-| 7 | Exception handling | In Progress | Added basic but wanted to improve further|
+| 7 | Exception handling | Completed | Implemented Global Exception handling. Improving further|
 | 8 | Optimize the code further to improve the performance | In Progress |
 | 9 | Create proper Tech design doc| In Progress |
 | 10 | Implement schedulors| In Progress |
 | 11 | Enhance the capabilities of the system by covering various corner case| In Progress |
 | 12 | High Level Architecture diagram| In Progress |
-| 13 | Database Schema design to the doc| In Progress |Schema design is ready but I will have to add to the doc|
+| 13 | Database Schema design to the doc| Completed |justlife.sql file is added to resource folder|
