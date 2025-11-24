@@ -40,7 +40,7 @@
 | 7 | Exception handling | Completed | Implemented Global Exception handling. Improving further|
 | 8 | Optimize the code further to improve the performance | In Progress |
 | 9 | Create proper Tech design doc| In Progress |
-| 10 | Implement schedulors| In Progress |
+| 10 | Implement schedulors| Completed | For now implemented an API to generate the schedules. Schedulers will be implemnented once we get the details|
 | 11 | Enhance the capabilities of the system by covering various corner case| In Progress |
 | 12 | High Level Architecture diagram| In Progress |
 | 13 | Database Schema design to the doc| Completed |justlife.sql file is added to resource folder|
