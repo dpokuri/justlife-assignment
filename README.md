@@ -14,7 +14,7 @@
 7. Customer will be providing date and start_time to update the booked appointment. Then system should be able to handle both date and start_time change
    
 
-## Use cases covered
+## Functional Requirements
 | S.NO | Use Case | Status |
 | :------- | :------ | :------- |
 | 1 | Availability check by date | Covered |
@@ -26,6 +26,20 @@
 | 7 | If single professional is not available to cover the entire duration then multiple professional can contribute to same duration like 1/2 hours by each professional| Not Covered |
 | 8 | Customer can choose available slots from one more professionals and system use that information and book the appointment. This is a kind of customer preferences| Not Covered |
 | 9 | Merging multiple hops into a single booking| Not Covered |
+
+
+## Non Functional Requirements
+1. Scalability --> Identify all the components/services where we can optimise the logic and design services to scale as per the requirements using both Infrastructure and Logic optimization. Will have to think about the storage, network bandwidth...
+2. Avaialability --> Work on replication to make the system available
+3. Performance --> performance and COGS Effeciency. 
+4. Security --> Implement API keys, JWT/OAuth with RBAC
+5. Availability vs Consistency --> Choose right ones between CP vs AP as per the use case
+
+Note: This section is out of scope hence leaving just high level details
+
+
+## High Level Architecture Diagram
+![ArchitectureDiagram](/src/main/resources/justlife-Homeservice-Architecture.png)
 
 
 ## Tasks Status
@@ -42,9 +56,5 @@
 | 9 | Create proper Tech design doc| In Progress |
 | 10 | Implement schedulors| Completed | For now implemented an API to generate the schedules. Schedulers will be implemnented once we get the details|
 | 11 | Enhance the capabilities of the system by covering various corner case| In Progress |
-| 12 | High Level Architecture diagram| In Progress |
+| 12 | High Level Architecture diagram| Completed |
 | 13 | Database Schema design to the doc| Completed |justlife.sql file is added to resource folder|
-
-
-## High Level Architecture Diagram
-![ArchitectureDiagram](/src/main/resources/justlife-Homeservice-Architecture.png)
