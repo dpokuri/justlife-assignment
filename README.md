@@ -44,3 +44,7 @@
 | 11 | Enhance the capabilities of the system by covering various corner case| In Progress |
 | 12 | High Level Architecture diagram| In Progress |
 | 13 | Database Schema design to the doc| Completed |justlife.sql file is added to resource folder|
+
+
+## High Level Architecture Diagram
+![ArchitectureDiagram](./resources/justlife-Homeservice-Architecture.png)
